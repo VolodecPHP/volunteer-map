@@ -20,6 +20,7 @@ import { useDetailsModal } from '../../hooks/useDetailsModal';
 import { DOTS } from '../../mock-data';
 import { useState } from 'react';
 import './Map.styles.css';
+import { useFeatureToggles } from '../../hooks/useFeatureToggles';
 
 const center = loadDefaultCenterCoords();
 const zoom = loadDefaultZoom();
@@ -40,6 +41,7 @@ const Map = () => {
 		openModal: openDetailsModal,
 	} = useDetailsModal();
 	const [dynamicCenterCoords, setDynamicCenterCoords] = useState(center);
+	const circleToggle = useFeatureToggles('showCircle');
 
 	const onDragEndHandler = () => {
 		if (mapInstance) {
@@ -54,10 +56,12 @@ const Map = () => {
 		if (mapInstance) {
 			setDefaultZoom(mapInstance.zoom);
 
-			setDynamicCenterCoords({
-				lat: mapInstance.center.lat(),
-				lng: mapInstance.center.lng(),
-			});
+			circleToggle.onValid(() =>
+				setDynamicCenterCoords({
+					lat: mapInstance.center.lat(),
+					lng: mapInstance.center.lng(),
+				})
+			);
 		}
 
 		closeInfoModal();
@@ -65,10 +69,12 @@ const Map = () => {
 
 	const onDragHandler = () => {
 		if (mapInstance) {
-			setDynamicCenterCoords({
-				lat: mapInstance.center.lat(),
-				lng: mapInstance.center.lng(),
-			});
+			circleToggle.onValid(() =>
+				setDynamicCenterCoords({
+					lat: mapInstance.center.lat(),
+					lng: mapInstance.center.lng(),
+				})
+			);
 		}
 
 		closeInfoModal();
@@ -109,7 +115,9 @@ const Map = () => {
 					onZoomChanged={onZoomHandler}
 					onDrag={onDragHandler}
 				>
-					<CircleF center={dynamicCenterCoords} options={options} />
+					{circleToggle.value && (
+						<CircleF center={dynamicCenterCoords} options={options} />
+					)}
 					{DOTS.map((dot) => (
 						<MarkerF
 							position={dot.location}
