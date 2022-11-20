@@ -8,7 +8,6 @@ const DEFAULT_CORDS = {
 const InfoModal = ({
 	isOpen,
 	infoText,
-	isLoading,
 	closeHandler,
 	coords,
 	textClickHandler,
@@ -25,11 +24,7 @@ const InfoModal = ({
 				top: coords.y || DEFAULT_CORDS.y,
 			}}
 		>
-			{isLoading ? (
-				<span>Loading...</span>
-			) : (
-				<button onClick={textClickHandler}>{infoText}</button>
-			)}
+			<button onClick={textClickHandler}>{infoText}</button>
 			<button onClick={closeHandler}>X</button>
 		</div>
 	);

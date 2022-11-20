@@ -6,7 +6,8 @@ import {
 } from '@react-google-maps/api';
 import { useMapInstance } from '../../hooks/useMapInstance';
 import { API_KEY } from '../../models/googleMaps';
-import okIcon from '../../icon.png';
+import I_NEED_ICON from '../../I_NEED.png';
+import I_HAVE_ICON from '../../I_HAVE.png';
 import {
 	loadDefaultCenterCoords,
 	loadDefaultZoom,
@@ -17,19 +18,21 @@ import { useInfoModal } from '../../hooks/useInfoModal';
 import { InfoModal } from '../InfoModal/InfoModal';
 import { DetailsModal } from '../DetailsModal/DetailsModal';
 import { useDetailsModal } from '../../hooks/useDetailsModal';
-import { DOTS } from '../../mock-data';
 import { useState } from 'react';
 import './Map.styles.css';
 import { useFeatureToggles } from '../../hooks/useFeatureToggles';
+import { AddPointModal } from '../AddPointModal/AddPointModal';
+import { useAddPointModal } from '../../hooks/useAddPointModal';
+import { useEffect } from 'react';
+import { useApiClient } from '../../services/firebaseApi';
 
 const center = loadDefaultCenterCoords();
 const zoom = loadDefaultZoom();
 
-const Map = () => {
+const Map = ({ openAddPointWithCords, markers, setMarkers }) => {
 	const { mapInstance, InfoCollector } = useMapInstance();
 	const {
 		isOpen: isInfoModalOpen,
-		isLoading: isInfoModalLoading,
 		closeModal: closeInfoModal,
 		modalCoords,
 		details,
@@ -42,6 +45,20 @@ const Map = () => {
 	} = useDetailsModal();
 	const [dynamicCenterCoords, setDynamicCenterCoords] = useState(center);
 	const circleToggle = useFeatureToggles('showCircle');
+	const {
+		isOpen: isAddPointModalOpen,
+		openModal: openAddPointModal,
+		closeModal: closeAddPointModal,
+		cords: addMarkerCords,
+		xy,
+	} = useAddPointModal();
+	const { getAllMarkers } = useApiClient();
+
+	useEffect(() => {
+		Promise.all([getAllMarkers()]).then((r) => {
+			setMarkers(r[0]);
+		});
+	}, []);
 
 	const onDragEndHandler = () => {
 		if (mapInstance) {
@@ -65,6 +82,7 @@ const Map = () => {
 		}
 
 		closeInfoModal();
+		closeAddPointModal();
 	};
 
 	const onDragHandler = () => {
@@ -78,13 +96,30 @@ const Map = () => {
 		}
 
 		closeInfoModal();
+		closeAddPointModal();
 	};
 
-	const onClickMarkerHandler = (e) => {
-		openModalWithCoords({
-			x: e.domEvent.clientX - e.domEvent.layerX,
-			y: e.domEvent.clientY - e.domEvent.offsetY,
-		});
+	const onClickMarkerHandler = (e, details) => {
+		openModalWithCoords(
+			{
+				x: e.domEvent.clientX - e.domEvent.layerX,
+				y: e.domEvent.clientY - e.domEvent.offsetY,
+			},
+			details
+		);
+	};
+
+	const onAddPointHandler = (e) => {
+		openAddPointModal(
+			{
+				lat: e.latLng.lat(),
+				lng: e.latLng.lng(),
+			},
+			{
+				x: e.domEvent.clientX,
+				y: e.domEvent.clientY,
+			}
+		);
 	};
 
 	const options = {
@@ -114,16 +149,17 @@ const Map = () => {
 					onDragEnd={onDragEndHandler}
 					onZoomChanged={onZoomHandler}
 					onDrag={onDragHandler}
+					onClick={onAddPointHandler}
 				>
 					{circleToggle.value && (
 						<CircleF center={dynamicCenterCoords} options={options} />
 					)}
-					{DOTS.map((dot) => (
+					{markers.map((marker) => (
 						<MarkerF
-							position={dot.location}
-							icon={okIcon}
-							onClick={onClickMarkerHandler}
-							key={dot.marker_id}
+							position={marker.markerLocation}
+							icon={marker.type === 'I_NEED' ? I_NEED_ICON : I_HAVE_ICON}
+							onClick={(e) => onClickMarkerHandler(e, marker)}
+							key={marker.id}
 						/>
 					))}
 					<InfoCollector />
@@ -131,7 +167,6 @@ const Map = () => {
 			</div>
 			<InfoModal
 				isOpen={isInfoModalOpen}
-				isLoading={isInfoModalLoading}
 				infoText={details.keyWords}
 				closeHandler={closeInfoModal}
 				coords={modalCoords}
@@ -141,6 +176,12 @@ const Map = () => {
 				isOpen={isDetailsModalOpen}
 				closeHandler={closeDetailsModal}
 				details={details}
+			/>
+			<AddPointModal
+				isOpen={isAddPointModalOpen}
+				closeHandler={closeAddPointModal}
+				openAddMarker={() => openAddPointWithCords(addMarkerCords)}
+				coords={xy}
 			/>
 		</LoadScript>
 	);

@@ -1,0 +1,11 @@
+.filter-panel {
+  width: 300px;
+  position: fixed;
+  top: 50px;
+  min-height: calc(100% - 50px);
+  left: 0;
+  z-index: 999;
+  background-color: rgba(125, 125, 125, 0.8);
+  overflow-y: auto;
+  height: 100%;
+}

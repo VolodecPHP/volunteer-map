@@ -3,7 +3,7 @@ import { useState } from 'react';
 const useDetailsModal = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const openModal = async (coords) => {
+	const openModal = async () => {
 		setIsOpen(true);
 	};
 

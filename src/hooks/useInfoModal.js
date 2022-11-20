@@ -1,14 +1,4 @@
 import { useState } from 'react';
-import { MARKERS_DATA } from '../mock-data';
-
-const loadInfoService = () => {
-	return new Promise((res) => {
-		setTimeout(
-			() => res(MARKERS_DATA.find((marker) => marker.id === '2')),
-			500
-		);
-	});
-};
 
 const useInfoModal = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -16,25 +6,15 @@ const useInfoModal = () => {
 		x: 0,
 		y: 0,
 	});
-	const [isLoading, setIsLoading] = useState(true);
 	const [details, setdetails] = useState({
 		keyWords: '',
 	});
 
-	const openModalWithCoords = async (coords) => {
+	const openModalWithCoords = async (coords, details) => {
+		console.log('I AM OPENING', coords, details);
 		setIsOpen(true);
-		setIsLoading(true);
+		setdetails(details);
 		setModalCoords(coords);
-
-		try {
-			const details = await loadInfoService();
-
-			setdetails(details);
-		} catch {
-			setdetails('Something went wrong');
-		}
-
-		setIsLoading(false);
 	};
 
 	const closeModal = () => {
@@ -43,7 +23,6 @@ const useInfoModal = () => {
 
 	return {
 		isOpen,
-		isLoading,
 		modalCoords,
 		details,
 		openModalWithCoords,

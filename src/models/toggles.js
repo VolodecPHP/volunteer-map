@@ -1,3 +1,3 @@
 export const defaultToggleStates = {
-	showCircle: true,
+	showCircle: false,
 };
