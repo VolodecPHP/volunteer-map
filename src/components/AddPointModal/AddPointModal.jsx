@@ -13,7 +13,14 @@ const AddPointModal = ({ isOpen, closeHandler, openAddMarker, coords }) => {
 				top: coords.y,
 			}}
 		>
-			<button onClick={openAddMarker}>Add point here</button>
+			<button
+				onClick={() => {
+					openAddMarker();
+					closeHandler();
+				}}
+			>
+				Add point here
+			</button>
 			<button onClick={closeHandler}>Close</button>
 		</div>
 	);

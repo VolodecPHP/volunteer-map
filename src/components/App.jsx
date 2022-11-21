@@ -13,7 +13,7 @@ function App() {
 	const [toggles, setToggles] = useState(defaultToggleStates);
 	const [showAuthPage, setShowAuthPage] = useState(false);
 	const [showAddPoint, setShowAddPoint] = useState(false);
-	const [showFilterPanel, setShowFilterPanel] = useState(true);
+	const [showFilterPanel, setShowFilterPanel] = useState(false);
 	const [addPointCords, setAddPointCords] = useState({
 		lat: 0,
 		lng: 0,
@@ -22,10 +22,14 @@ function App() {
 
 	const [markers, setMarkers] = useState([]);
 	const [filterParam, setFilterParam] = useState('');
+	const [defaultPointValues, setDefaulPointValues] = useState({});
+	const [addPointMethod, setAddPointMethod] = useState('add');
 
-	const openAddPointWithCords = (cords) => {
+	const openAddPointWithCords = (cords, defaultValues, method = 'add') => {
 		setShowAddPoint(true);
 		setAddPointCords(cords);
+		setDefaulPointValues(defaultValues);
+		setAddPointMethod(method);
 	};
 
 	const filteredMarkers = useMemo(
@@ -60,6 +64,9 @@ function App() {
 						setAddPointCords={setAddPointCords}
 						cords={addPointCords}
 						closeAddPoint={() => setShowAddPoint(false)}
+						setMarkers={setMarkers}
+						defaultValues={defaultPointValues}
+						action={addPointMethod}
 					/>
 				)}
 				<Map

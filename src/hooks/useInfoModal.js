@@ -11,7 +11,6 @@ const useInfoModal = () => {
 	});
 
 	const openModalWithCoords = async (coords, details) => {
-		console.log('I AM OPENING', coords, details);
 		setIsOpen(true);
 		setdetails(details);
 		setModalCoords(coords);

@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyB0rxitVk1KViiJNo81zpzL9N11iTIUgpg',
-	authDomain: 'volunteer-map-2.firebaseapp.com',
-	projectId: 'volunteer-map-2',
-	storageBucket: 'volunteer-map-2.appspot.com',
-	messagingSenderId: '941830477150',
-	appId: '1:941830477150:web:759dd4bc158dc1aa936bcf',
+	apiKey: 'AIzaSyDKHtQEIvyH0-npwOgUEkeCHRshXYl4mK8',
+	authDomain: 'volonteer-map.firebaseapp.com',
+	projectId: 'volonteer-map',
+	storageBucket: 'volonteer-map.appspot.com',
+	messagingSenderId: '1046054218517',
+	appId: '1:1046054218517:web:c1bc4eae427d05dfec171c',
 };
 
 const app = initializeApp(firebaseConfig);

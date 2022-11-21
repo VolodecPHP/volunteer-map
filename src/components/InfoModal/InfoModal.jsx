@@ -1,3 +1,4 @@
+import { useApiClient } from '../../services/firebaseApi';
 import './InfoModal.styles.css';
 
 const DEFAULT_CORDS = {
@@ -11,10 +12,17 @@ const InfoModal = ({
 	closeHandler,
 	coords,
 	textClickHandler,
+	ownerId,
+	openEdit,
 }) => {
+	const { getUuidFromLocalStorage } = useApiClient();
+
 	if (!isOpen) {
 		return null;
 	}
+
+	const ownerFromLocaleStorage = getUuidFromLocalStorage();
+	const isOwner = ownerFromLocaleStorage === ownerId;
 
 	return (
 		<div
@@ -25,6 +33,16 @@ const InfoModal = ({
 			}}
 		>
 			<button onClick={textClickHandler}>{infoText}</button>
+			{isOwner && (
+				<button
+					onClick={() => {
+						openEdit();
+						closeHandler();
+					}}
+				>
+					edit
+				</button>
+			)}
 			<button onClick={closeHandler}>X</button>
 		</div>
 	);

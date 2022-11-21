@@ -3,25 +3,19 @@ import { MARK_TYPES, useApiClient } from '../../services/firebaseApi';
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect } from 'react';
 
-const AddPoint = ({ cords, closeAddPoint }) => {
-	const [dot, setDot] = useState({
-		lat: cords.lat,
-		lng: cords.lng,
-	});
-
+const AddPoint = ({
+	cords,
+	closeAddPoint,
+	setMarkers: setMarkersFromApp,
+	defaultValues,
+	action,
+}) => {
 	const {
 		getIsAuthFromLocalStorage,
-		addDot,
 		addMarker,
 		getUuidFromLocalStorage,
+		updateMarker,
 	} = useApiClient();
-
-	useEffect(() => {
-		setDot({
-			lat: cords.lat,
-			lng: cords.lng,
-		});
-	}, [cords]);
 
 	const [marker, setMarker] = useState({
 		type: MARK_TYPES.I_NEED,
@@ -32,7 +26,28 @@ const AddPoint = ({ cords, closeAddPoint }) => {
 		notes: '',
 		keyWords: '',
 		items: [],
+		markerLocation: {
+			lat: cords.lat,
+			lng: cords.lng,
+		},
+		...defaultValues,
 	});
+
+	useEffect(() => {
+		setMarker({
+			...marker,
+			markerLocation: {
+				lat: cords.lat,
+				lng: cords.lng,
+			},
+		});
+	}, [cords]);
+
+	useEffect(() => {
+		if (defaultValues) {
+			setMarker(defaultValues);
+		}
+	}, [defaultValues]);
 
 	const changeItemNameById = (id, name) => {
 		setMarker({
@@ -75,23 +90,32 @@ const AddPoint = ({ cords, closeAddPoint }) => {
 	}
 
 	const submitHandler = async () => {
-		const userId = getUuidFromLocalStorage();
-		const markerId = uuidv4();
-
-		await addDot({
-			marker_id: markerId,
-			location: dot,
-			type: marker.type,
-		});
-
-		await addMarker({
+		const markerToAdd = {
 			...marker,
-			id: markerId,
-			ownerId: userId,
+			id: uuidv4(),
+			ownerId: getUuidFromLocalStorage(),
 			creationDate: Date.now(),
-		});
+		};
+
+		await addMarker(markerToAdd);
+
+		setMarkersFromApp((value) => [...value, markerToAdd]);
+		closeAddPoint();
+	};
+
+	const updatePointHandler = async () => {
+		await updateMarker(marker.id, marker);
+
+		setMarkersFromApp((values) => [
+			...values.filter((item) => item.id !== marker.id),
+			marker,
+		]);
 
 		closeAddPoint();
+	};
+
+	const deletePointHandler = async () => {
+		console.log('delete');
 	};
 
 	return (
@@ -102,13 +126,23 @@ const AddPoint = ({ cords, closeAddPoint }) => {
 				Coords
 				<input
 					type='text'
-					value={dot.lat}
-					onChange={(e) => setDot({ ...dot, lat: e.target.value })}
+					value={marker.markerLocation.lat}
+					onChange={(e) =>
+						setMarker({
+							...marker,
+							markerLocation: { ...marker.markerLocation, lat: e.target.value },
+						})
+					}
 				/>
 				<input
 					type='text'
-					value={dot.lng}
-					onChange={(e) => setDot({ ...dot, lng: e.target.value })}
+					value={marker.markerLocation.lng}
+					onChange={(e) =>
+						setMarker({
+							...marker,
+							markerLocation: { ...marker.markerLocation, lng: e.target.value },
+						})
+					}
 				/>
 			</label>
 			<br />
@@ -233,7 +267,13 @@ const AddPoint = ({ cords, closeAddPoint }) => {
 					Add item
 				</button>
 			</div>
-			<button onClick={submitHandler}>Add point</button>
+			{action === 'add' && <button onClick={submitHandler}>Add point</button>}
+			{action === 'update' && (
+				<button onClick={updatePointHandler}>Update point</button>
+			)}
+			{action === 'update' && (
+				<button onClick={deletePointHandler}>Delete point</button>
+			)}
 			<button onClick={closeAddPoint}>close</button>
 		</section>
 	);

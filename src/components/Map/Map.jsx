@@ -168,9 +168,13 @@ const Map = ({ openAddPointWithCords, markers, setMarkers }) => {
 			<InfoModal
 				isOpen={isInfoModalOpen}
 				infoText={details.keyWords}
+				ownerId={details.ownerId}
 				closeHandler={closeInfoModal}
 				coords={modalCoords}
 				textClickHandler={openDetailsModal}
+				openEdit={() =>
+					openAddPointWithCords(addMarkerCords, details, 'update')
+				}
 			/>
 			<DetailsModal
 				isOpen={isDetailsModalOpen}
