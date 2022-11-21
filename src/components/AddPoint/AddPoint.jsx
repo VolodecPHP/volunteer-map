@@ -15,6 +15,7 @@ const AddPoint = ({
 		addMarker,
 		getUuidFromLocalStorage,
 		updateMarker,
+		removeMarker,
 	} = useApiClient();
 
 	const [marker, setMarker] = useState({
@@ -106,16 +107,27 @@ const AddPoint = ({
 	const updatePointHandler = async () => {
 		await updateMarker(marker.id, marker);
 
-		setMarkersFromApp((values) => [
-			...values.filter((item) => item.id !== marker.id),
-			marker,
-		]);
+		setMarkersFromApp((value) =>
+			value.map((item) => {
+				if (item.id === marker.id) {
+					return marker;
+				}
 
+				return item;
+			})
+		);
 		closeAddPoint();
 	};
 
 	const deletePointHandler = async () => {
-		console.log('delete');
+		await removeMarker(marker.id);
+
+		if (window.confirm('Are your sure you want to delete this point?')) {
+			setMarkersFromApp((values) =>
+				values.filter(({ id }) => id !== marker.id)
+			);
+			closeAddPoint();
+		}
 	};
 
 	return (

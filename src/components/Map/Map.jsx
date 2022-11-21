@@ -136,6 +136,14 @@ const Map = ({ openAddPointWithCords, markers, setMarkers }) => {
 		zIndex: 100,
 	};
 
+	useEffect(() => {
+		console.log(markers);
+	}, [markers]);
+
+	const getMarkerIcon = (type) => {
+		return type === 'I_NEED' ? I_NEED_ICON : I_HAVE_ICON;
+	};
+
 	return (
 		<LoadScript googleMapsApiKey={API_KEY}>
 			<div className='map-wrapper'>
@@ -157,7 +165,7 @@ const Map = ({ openAddPointWithCords, markers, setMarkers }) => {
 					{markers.map((marker) => (
 						<MarkerF
 							position={marker.markerLocation}
-							icon={marker.type === 'I_NEED' ? I_NEED_ICON : I_HAVE_ICON}
+							icon={getMarkerIcon(marker.type)}
 							onClick={(e) => onClickMarkerHandler(e, marker)}
 							key={marker.id}
 						/>
