@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useState } from 'react';
 import { defaultToggleStates } from '../models/toggles';
-import { useApiClient } from '../services/firebaseApi';
 import { AddPoint } from './AddPoint/AddPoint';
 import { AuthPage } from './AuthPage/AuthPage';
 import { FeatureTogglesContext } from './FeatureTogglesContext';
@@ -20,7 +19,6 @@ function App() {
 		lat: 0,
 		lng: 0,
 	});
-	const api = useApiClient();
 
 	const [markers, setMarkers] = useState([]);
 	const [filterParam, setFilterParam] = useState('');
@@ -43,7 +41,6 @@ function App() {
 			}),
 		[filterParam, markers]
 	);
-	window.firebaseApi = api;
 
 	return (
 		<div className='App'>
@@ -60,19 +57,23 @@ function App() {
 						setFilterParam={setFilterParam}
 						markers={filteredMarkers}
 					/>
-					<AuthPage
-						showAuthPage={showAuthPage}
-						setIsAuthPage={setShowAuthPage}
-					/>
-					<AddPoint
-						showAddPoint={showAddPoint}
-						setAddPointCords={setAddPointCords}
-						cords={addPointCords}
-						closeAddPoint={() => setShowAddPoint(false)}
-						setMarkers={setMarkers}
-						defaultValues={defaultPointValues}
-						action={addPointMethod}
-					/>
+					{showAuthPage && (
+						<AuthPage
+							showAuthPage={showAuthPage}
+							setIsAuthPage={setShowAuthPage}
+						/>
+					)}
+					{showAddPoint && (
+						<AddPoint
+							showAddPoint={showAddPoint}
+							setAddPointCords={setAddPointCords}
+							cords={addPointCords}
+							closeAddPoint={() => setShowAddPoint(false)}
+							setMarkers={setMarkers}
+							defaultValues={defaultPointValues}
+							action={addPointMethod}
+						/>
+					)}
 				</div>
 				<Map
 					openAddPointWithCords={openAddPointWithCords}

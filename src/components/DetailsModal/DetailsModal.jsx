@@ -1,8 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import { MARK_TYPES } from '../../services/firebaseApi';
 
 import './DetailsModal.styles.css';
@@ -41,15 +39,8 @@ const DetailsModal = ({ isOpen, closeHandler, details }) => {
 
 			<Modal.Body>
 				<div className='details-modal'>
+					<h3>Items:</h3>
 					<Table className='details-modal__items' bordered striped>
-						<thead>
-							<td>
-								<b>Name</b>
-							</td>
-							<td>
-								<b>Quantity</b>
-							</td>
-						</thead>
 						<tbody>
 							{details.items.map((item) => (
 								<tr>
@@ -59,7 +50,9 @@ const DetailsModal = ({ isOpen, closeHandler, details }) => {
 							))}
 						</tbody>
 					</Table>
+					<br />
 					<Table className='details-modal__info' bordered striped>
+						<h3>Details:</h3>
 						<tbody>
 							<tr>
 								<td>
@@ -92,6 +85,12 @@ const DetailsModal = ({ isOpen, closeHandler, details }) => {
 									<b>Notes</b>
 								</td>
 								<td>{details.notes}</td>
+							</tr>
+							<tr>
+								<td>
+									<b>Keywords</b>
+								</td>
+								<td>{details.keyWords}</td>
 							</tr>
 						</tbody>
 					</Table>

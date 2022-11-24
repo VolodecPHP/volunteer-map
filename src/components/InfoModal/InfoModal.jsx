@@ -28,6 +28,9 @@ const InfoModal = ({
 	const ownerFromLocaleStorage = getUuidFromLocalStorage();
 	const isOwner = ownerFromLocaleStorage === ownerId;
 
+	const cuttedInfoText =
+		infoText.length >= 20 ? `${infoText.slice(0, 18)}...` : infoText;
+
 	return (
 		<div
 			className='info-modal'
@@ -36,7 +39,7 @@ const InfoModal = ({
 				top: coords.y || DEFAULT_CORDS.y,
 			}}
 		>
-			<Button onClick={textClickHandler}>Check</Button>
+			<Button onClick={textClickHandler}>{cuttedInfoText}</Button>
 			{isOwner && (
 				<Button
 					variant='warning'
