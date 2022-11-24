@@ -1,3 +1,6 @@
+import CloseButton from 'react-bootstrap/CloseButton';
+import Button from 'react-bootstrap/Button';
+
 import './AddPointModal.styles.css';
 
 const AddPointModal = ({ isOpen, closeHandler, openAddMarker, coords }) => {
@@ -13,15 +16,15 @@ const AddPointModal = ({ isOpen, closeHandler, openAddMarker, coords }) => {
 				top: coords.y,
 			}}
 		>
-			<button
+			<Button
 				onClick={() => {
 					openAddMarker();
 					closeHandler();
 				}}
 			>
 				Add point here
-			</button>
-			<button onClick={closeHandler}>Close</button>
+			</Button>
+			<CloseButton onClick={closeHandler} />
 		</div>
 	);
 };

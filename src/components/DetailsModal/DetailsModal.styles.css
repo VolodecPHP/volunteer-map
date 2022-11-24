@@ -1,10 +1,16 @@
-.details-modal {
-  width: 80%;
-  height: 90vh;
-  position: fixed;
-  top: 5vh;
-  left: 10%;
-  background-color: antiquewhite;
-  border: 1px solid #929292;
-  z-index: 100;
+.goToMap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 15rem;
+}
+
+.goToMap svg {
+  max-width: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.details-modal__items tbody tr:first-child td:first-child,
+.details-modal__info tbody tr:first-child td:first-child {
+  width: 50%;
 }

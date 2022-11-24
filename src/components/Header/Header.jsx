@@ -1,10 +1,18 @@
 import './Header.styles.css';
+import Button from 'react-bootstrap/Button';
 
 const Header = ({ setIsAuthPage, openFilter }) => {
 	return (
 		<header className='header'>
-			<button onClick={() => setIsAuthPage((value) => !value)}>Login</button>
-			<button onClick={openFilter}>open filter panel</button>
+			<Button variant='primary' onClick={openFilter}>
+				Filters
+			</Button>
+			<Button
+				variant='success'
+				onClick={() => setIsAuthPage((value) => !value)}
+			>
+				Login
+			</Button>
 		</header>
 	);
 };

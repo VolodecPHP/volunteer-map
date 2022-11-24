@@ -1,4 +1,8 @@
+import CloseButton from 'react-bootstrap/CloseButton';
+import Button from 'react-bootstrap/Button';
+
 import { useApiClient } from '../../services/firebaseApi';
+
 import './InfoModal.styles.css';
 
 const DEFAULT_CORDS = {
@@ -32,18 +36,19 @@ const InfoModal = ({
 				top: coords.y || DEFAULT_CORDS.y,
 			}}
 		>
-			<button onClick={textClickHandler}>{infoText}</button>
+			<Button onClick={textClickHandler}>Check</Button>
 			{isOwner && (
-				<button
+				<Button
+					variant='warning'
 					onClick={() => {
 						openEdit();
 						closeHandler();
 					}}
 				>
-					edit
-				</button>
+					Edit
+				</Button>
 			)}
-			<button onClick={closeHandler}>X</button>
+			<CloseButton onClick={closeHandler} />
 		</div>
 	);
 };

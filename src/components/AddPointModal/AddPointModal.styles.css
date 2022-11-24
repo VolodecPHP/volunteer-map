@@ -6,6 +6,8 @@
   border: 1px solid #929292;
   transform: translateX(-50%);
   z-index: 10;
+  display: flex;
+  align-items: center;
 }
 
 .add-point-modal::before {
@@ -18,4 +20,8 @@
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.add-point-modal button {
+  margin: 0 5px;
 }

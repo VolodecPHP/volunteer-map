@@ -136,10 +136,6 @@ const Map = ({ openAddPointWithCords, markers, setMarkers }) => {
 		zIndex: 100,
 	};
 
-	useEffect(() => {
-		console.log(markers);
-	}, [markers]);
-
 	const getMarkerIcon = (type) => {
 		return type === 'I_NEED' ? I_NEED_ICON : I_HAVE_ICON;
 	};
@@ -150,7 +146,7 @@ const Map = ({ openAddPointWithCords, markers, setMarkers }) => {
 				<GoogleMap
 					mapContainerStyle={{
 						width: '100%',
-						height: 'calc(100vh - 50px)',
+						height: '100%',
 					}}
 					center={center}
 					zoom={zoom}

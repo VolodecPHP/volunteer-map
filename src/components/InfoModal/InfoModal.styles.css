@@ -6,4 +6,10 @@
   border: 1px solid #929292;
   transform: translateX(-50%);
   z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.info-modal button {
+  margin: 0 5px;
 }

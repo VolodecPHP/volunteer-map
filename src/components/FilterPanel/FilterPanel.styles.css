@@ -1,11 +1,29 @@
 .filter-panel {
-  width: 300px;
+  width: 20rem;
   position: fixed;
-  top: 50px;
-  min-height: calc(100% - 50px);
+  top: 0;
   left: 0;
+  height: 100vh;
   z-index: 999;
-  background-color: rgba(125, 125, 125, 0.8);
   overflow-y: auto;
-  height: 100%;
+  transition: all .3s ease-in-out;
+  background: white;
+  transform-origin: left center;
+  transform: scaleX(0);
+  padding: 1rem .5rem;
+}
+
+.filter-panel--show {
+  transform: scaleX(1);
+}
+
+.filter-panel__input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.filter-panel__input button {
+  margin-left: 0.5rem;
 }

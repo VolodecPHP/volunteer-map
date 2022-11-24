@@ -9,6 +9,8 @@ import { FilterPanel } from './FilterPanel/FilterPanel';
 import { Header } from './Header/Header';
 import { Map } from './Map/Map';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
 	const [toggles, setToggles] = useState(defaultToggleStates);
 	const [showAuthPage, setShowAuthPage] = useState(false);
@@ -46,21 +48,24 @@ function App() {
 	return (
 		<div className='App'>
 			<FeatureTogglesContext.Provider value={{ toggles, setToggles }}>
-				<Header
-					setIsAuthPage={setShowAuthPage}
-					openFilter={() => setShowFilterPanel(true)}
-				/>
-				{showFilterPanel && (
+				<div>
+					<Header
+						setIsAuthPage={setShowAuthPage}
+						openFilter={() => setShowFilterPanel(!showFilterPanel)}
+					/>
 					<FilterPanel
+						showFilterPanel={showFilterPanel}
 						close={() => setShowFilterPanel(false)}
 						filterParam={filterParam}
 						setFilterParam={setFilterParam}
 						markers={filteredMarkers}
 					/>
-				)}
-				{showAuthPage && <AuthPage setIsAuthPage={setShowAuthPage} />}
-				{showAddPoint && (
+					<AuthPage
+						showAuthPage={showAuthPage}
+						setIsAuthPage={setShowAuthPage}
+					/>
 					<AddPoint
+						showAddPoint={showAddPoint}
 						setAddPointCords={setAddPointCords}
 						cords={addPointCords}
 						closeAddPoint={() => setShowAddPoint(false)}
@@ -68,7 +73,7 @@ function App() {
 						defaultValues={defaultPointValues}
 						action={addPointMethod}
 					/>
-				)}
+				</div>
 				<Map
 					openAddPointWithCords={openAddPointWithCords}
 					markers={filteredMarkers}
